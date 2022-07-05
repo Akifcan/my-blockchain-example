@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="connect">connect</button>
+    <button id="send">send</button>
+
+    <script type="module" src="./ethers.js"></script>
+    <script type="module">
+        import { ethers } from './ethers.js'
+        fetch('./build/contracts/Send.json')
+            .then(res => res.json())
+            .then(data => {
+                const abi = data.abi
+                let address
+                document.getElementById('connect').addEventListener('click', _ => {
+                    ethereum
+                        .request({ method: 'eth_requestAccounts' })
+                        .then(connected => {
+                            console.log(connected)
+                            address = connected[0]
+                            // ethereum
+                            //     .request({
+                            //         method: 'eth_sendTransaction',
+                            //         params: [{
+                            //             from: connected[0],
+                            //             to: '0x58049D6d7B21A6Ef253e53C924801244927357B2',
+                            //             gas: '0x76c0', // 30400
+                            //             gasPrice: '0x9184e72a000', // 10000000000000
+                            //             value: '0x9184e72a', // 2441406250
+                            //             data:
+                            //                 '0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675',
+                            //         }],
+                            //     })
+                        })
+                })
+                document.getElementById('send').addEventListener('click', async _ => {
+                    const provider = new ethers.providers.Web3Provider(window.ethereum)
+                    const signer = provider.getSigner()
+                    const sendEthContract = new ethers.Contract("0xE82f69d33624eAe39abDe62FCF14155563B3B9a3", abi, signer)
+                    const hash = await sendEthContract.sendEth("0x33DD39615953BbE87de6fad1447Bd3EA2a112973", { value: ethers.utils.parseEther("1.0") })
+                    await hash.wait()
+                    console.log(hash)
+                })
+            })
+    </script>
+
+</body>
+
+</html>

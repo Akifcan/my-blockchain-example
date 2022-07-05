@@ -118,7 +118,7 @@ contract('ColdChain', (accounts) => {
         }
     })
 
-    it('should sign a message', async () => {
+    it.skip('should sign a message', async () => {
         const coldChainInstance = await ColdChain.deployed()
         const mnemonic = 'dilemma mixed delay despair box denial health cheap dice gloom head pitch'
         const providerOrUrl = 'http://localhost:8545'
